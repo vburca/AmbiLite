@@ -1,4 +1,4 @@
-organization  := "com.example"
+organization  := "me.owlcode"
 
 version       := "0.1"
 
