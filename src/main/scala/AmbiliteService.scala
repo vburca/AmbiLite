@@ -1,4 +1,4 @@
-package com.example
+package ambilite.service
 
 import akka.actor.Actor
 import spray.routing._
@@ -9,7 +9,7 @@ import scalalirc._
 
 // we don't implement our route structure directly in the service actor because
 // we want to be able to test it independently, without having to spin up an actor
-class MyServiceActor extends Actor with MyService {
+class AmbiLiteServiceActor extends Actor with AmbiLiteService {
 
   // the HttpService trait defines only one abstract member, which
   // connects the services environment to the enclosing actor or test
@@ -23,15 +23,16 @@ class MyServiceActor extends Actor with MyService {
 
 
 // this trait defines our service behavior independently from the service actor
-trait MyService extends HttpService {
+trait AmbiLiteService extends HttpService {
   val lirc = new ScalaLirc()
 
   val myRoute = {
-    path("On") {
+    path("ambilite") {
       get {
-        complete {
-          lirc.sendOnce("AmbiLite", "BTN_START")
-          "Turning lights On!"
+        parameters("command") { command =>
+          complete {
+            processCommand(command)
+          }
         }
       }
     } ~
@@ -43,5 +44,10 @@ trait MyService extends HttpService {
         }
       }
     }
+  }
+
+  def processCommand(command: String): String = {
+    lirc.sendOnce("AmbiLite", command)
+    s"Running command $command"
   }
 }
