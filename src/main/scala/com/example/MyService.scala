@@ -29,14 +29,18 @@ trait MyService extends HttpService {
   val myRoute = {
     path("On") {
       get {
-        lirc.sendOnce("AmbiLite", "BTN_START")
-        complete("Turning lights On!")
+        complete {
+          lirc.sendOnce("AmbiLite", "BTN_START")
+          "Turning lights On!"
+        }
       }
     } ~
     path("Off") {
       get {
-        lirc.sendOnce("AmbiLite", "KEY_STOP")
-        complete("Turning lights Off!")
+        complete {
+          lirc.sendOnce("AmbiLite", "KEY_STOP")
+          "Turning lights Off!"
+        }
       }
     }
   }
