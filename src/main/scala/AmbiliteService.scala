@@ -24,7 +24,7 @@ class AmbiLiteServiceActor extends Actor with AmbiLiteService {
 
 // this trait defines our service behavior independently from the service actor
 trait AmbiLiteService extends HttpService {
-  val lirc = new ScalaLirc()
+  val lirc = ScalaLirc()
 
   val myRoute = {
     path("ambilite") {
@@ -35,19 +35,15 @@ trait AmbiLiteService extends HttpService {
           }
         }
       }
-    } ~
-    path("Off") {
-      get {
-        complete {
-          lirc.sendOnce("AmbiLite", "KEY_STOP")
-          "Turning lights Off!"
-        }
-      }
     }
   }
 
   def processCommand(command: String): String = {
-    lirc.sendOnce("AmbiLite", command)
-    s"Running command $command"
+    if (lirc.isDefined) {
+      lirc.get.sendOnce("AmbiLite", command)
+      s"Running command $command"
+    } else {
+      s"Error instantiating LIRC object"
+    }
   }
 }

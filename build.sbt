@@ -21,6 +21,6 @@ libraryDependencies ++= {
   )
 }
 
-libraryDependencies += "me.owlcode" %% "scala-lirc" % "0.1.0"
+libraryDependencies += "me.owlcode" %% "scala-lirc" % "0.1.1"
 
 Revolver.settings
